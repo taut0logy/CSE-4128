@@ -3,7 +3,7 @@
 import cv2
 import numpy as np
 
-img=cv2.imread('box.jpg', cv2.IMREAD_GRAYSCALE)
+img=cv2.imread('Lena.jpg', cv2.IMREAD_GRAYSCALE)
 
 px=np.array([
     [-1,0,1],
@@ -45,8 +45,8 @@ grad_mag = np.sqrt(img_px**2 + img_py**2)
 grad_mag_norm = cv2.normalize(grad_mag, None, 0, 255, cv2.NORM_MINMAX).astype(np.uint8)
 
 
-cv2.imshow('Convolution Image 2 (x)', img_px)
-cv2.imshow('Convolution Image 2 (y)', img_py)
+cv2.imshow('Convolution Image (x)', img_px)
+cv2.imshow('Convolution Image (y)', img_py)
 
 cv2.imshow('Normalized sobel filter (x)', norm_px)
 cv2.imshow('Normalized sobel filter (y)', norm_py)
