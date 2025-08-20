@@ -21,7 +21,7 @@ def convolve(img, kernel):
                     sum += img_bordered[i - m, j - n] * kernel[m + pad, n + pad]
             img_conv[i, j] = sum
             
-    img_norm = cv2.normalize(img_conv, None, 0, 255, norm_type=cv2.NORM_MINMAX).astype(np.uint8)
+    img_norm = np.round(cv2.normalize(img_conv, None, 0, 255, norm_type=cv2.NORM_MINMAX)).astype(np.uint8)
     img_res = img_norm[pad: h + pad, pad: w + pad]
     
     return img_bordered, img_conv, img_norm, img_res
