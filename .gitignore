@@ -4,3 +4,8 @@
 
 .py[cod]
 __pycache__/
+*.zip
+*.rar
+*.7z
+
+~$*.pptx
