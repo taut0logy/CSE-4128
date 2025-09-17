@@ -51,27 +51,29 @@ hist_eq_f = cv2.equalizeHist(img)
 hist_eq_f_val = cv2.calcHist([hist_eq_f], [0], None, [256], [0,256])
 hist_eq_f_val = cv2.transpose(hist_eq_f_val)[0]
 
-plt.figure(figsize=(18, 24))
+plt.figure(figsize=(12, 18))
 
 plt.subplot(4,2,1)
-plt.imshow(hist_eq_f, cmap='gray')
-plt.title('Equalized Image (built-in)')
-plt.axis("off")
-
-plt.subplot(4,2,2)
-plt.title('Equalized Histogram (built-in)')
-plt.grid()
-plt.bar(range(256), hist_eq_f_val, color='green')
-
-plt.subplot(4,2,3)
 plt.imshow(img, cmap='gray')
 plt.title("Original Image")
 plt.axis("off")
 
-plt.subplot(4,2,4)
+plt.subplot(4,2,3)
 plt.imshow(img_eq, cmap='gray')
 plt.title("Equalized Image")
 plt.axis("off")
+
+plt.subplot(4,2,2)
+plt.imshow(hist_eq_f, cmap='gray')
+plt.title('Equalized Image (built-in)')
+plt.axis("off")
+
+plt.subplot(4,2,4)
+plt.title('Equalized Histogram (built-in)')
+plt.grid()
+plt.bar(range(256), hist_eq_f_val, color='green')
+
+
 
 plt.subplot(4,2,5)
 plt.title('Original Histogram')
