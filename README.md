@@ -4,6 +4,14 @@
 
 This repository contains the code and resources for the CSE 4128 course, for CSE 2K20, KUET
 
+## Author
+
+**Raufun Ahsan**
+
+*Roll: 2007030*
+
+*Session: 2020-2021*
+
 ## Requirements
 
 This project requires Python 3.x and the following packages:
