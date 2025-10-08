@@ -34,7 +34,7 @@ def double_threshold(image, T_min=64, T_max=128):
             else:
                 image[i, j] = 255
 
-img = cv2.imread('../../../assets/Lena.jpg', cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('../../assets/Lena.jpg', cv2.IMREAD_GRAYSCALE)
 
 kernel_x, kernel_y = gaussian_derivative_kernels()
 

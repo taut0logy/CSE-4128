@@ -9,3 +9,8 @@ __pycache__/
 *.7z
 
 ~$*.pptx
+intermediate_results/
+sample_images/
+enhanced_images/
+demo_*.*
+frame_fusion/
