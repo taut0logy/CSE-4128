@@ -26,7 +26,7 @@ for i in range(1, img_log.shape[0] - 1):
     for j in range(1, img_log.shape[1] - 1):
         patch = img_log[i-1:i+2, j-1:j+2]
         if np.any(patch > 0) and np.any(patch < 0):
-            local_region = img_log[i-1:i+2, j-1:j+2].flatten()
+            local_region = patch.flatten()
             mean_val = np.mean(local_region)
             variance = np.mean((local_region - mean_val)**2)
             
