@@ -5,7 +5,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # take input
-img_input = cv2.imread('pnois2.jpg', 0)
+img_input = cv2.imread('../../../assets/pnois2.jpg', 0)
 img = img_input.copy()
 image_size = img.shape[0] * img.shape[1]
 

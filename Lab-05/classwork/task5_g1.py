@@ -20,7 +20,7 @@ magnitude_spectrum = cv2.normalize(magnitude_spectrum, None,0,255,cv2.NORM_MINMA
 ang = np.angle(ft_shift)
 ang_ = cv2.normalize(ang, None,0,255,cv2.NORM_MINMAX,dtype=cv2.CV_8U) 
 
-def filter(img, x, y, d):
+def notch_filter(img, x, y, d):
     h,w=img.shape
     M,N=h // 2, w // 2
     X, Y = x-M, y-N
@@ -34,13 +34,24 @@ def filter(img, x, y, d):
 
     return flt
 
+def band_pass_filter(img, d):
+    h,w=img.shape
+    M,N=h // 2, w // 2
+    flt=np.zeros_like(img)
+    for i in range(h):
+        for j in range(w):
+            if np.sqrt((i-M)**2+(j-N)**2)<=d:
+                flt[i,j]=1
+    return flt
+
 d=int(input("Enter d: "))
 
 #Apply filter here
 
-notch = filter(magnitude_spectrum_ac, 261, 261, d)
-magnitude_spectrum_ac = magnitude_spectrum_ac * notch
-filtered_spectrum = magnitude_spectrum * notch
+band= band_pass_filter(magnitude_spectrum_ac, d)
+notch = notch_filter(magnitude_spectrum_ac, 261, 261, d)
+magnitude_spectrum_ac = magnitude_spectrum_ac * band
+filtered_spectrum = magnitude_spectrum * band
 
 ## phase add F(u,v)=∣F(u,v)∣*e^jθ(u,v)
 final_result = np.multiply(magnitude_spectrum_ac, np.exp(1j*ang))
@@ -52,7 +63,8 @@ img_back_scaled = cv2.normalize(img_back, None, 0,255,cv2.NORM_MINMAX,dtype=cv2.
 
 ## plot
 cv2.imshow("input", img_input)
-cv2.imshow("Notch Filter", notch*255)
+#cv2.imshow("Notch Filter", notch*255)
+cv2.imshow("Band Pass Filter", band*255)
 cv2.imshow("Magnitude Spectrum",magnitude_spectrum)
 cv2.imshow("Magnitude Spectrum after filter",cv2.normalize(filtered_spectrum, None,0,255,cv2.NORM_MINMAX,dtype=cv2.CV_8U))
 cv2.imshow("Phase", ang_)
