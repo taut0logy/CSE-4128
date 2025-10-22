@@ -4,7 +4,7 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 # take input
-img_input = cv2.imread('../../assets/pnois2.jpg', cv2.IMREAD_GRAYSCALE)
+img_input = cv2.imread('../../assets/two_noise.jpeg', cv2.IMREAD_GRAYSCALE)
 img = img_input.copy()
 image_size = img.shape[0] * img.shape[1]
 
@@ -20,51 +20,43 @@ magnitude_spectrum = cv2.normalize(magnitude_spectrum, None,0,255,cv2.NORM_MINMA
 ang = np.angle(ft_shift)
 ang_ = cv2.normalize(ang, None,0,255,cv2.NORM_MINMAX,dtype=cv2.CV_8U) 
 
-def notch_filter(img, x, y, d):
-    h,w=img.shape
-    M,N=h // 2, w // 2
-    X, Y = x-M, y-N
-    flt=np.ones_like(img)
-    for i in range(h):
-        for j in range(w):
-            d1 = np.sqrt((i-M-X)**2+(j-N-Y)**2)
-            d2 = np.sqrt((i-M+X)**2+(j-N+Y)**2)
-            if(d1<=d or d2<=d):
-                flt[i,j]=0
-
-    return flt
-
-def band_pass_filter(img, d):
-    h,w=img.shape
-    M,N=h // 2, w // 2
-    flt=np.zeros_like(img)
-    for i in range(h):
-        for j in range(w):
-            if np.sqrt((i-M)**2+(j-N)**2)<=d:
-                flt[i,j]=1
-    return flt
-
-d=int(input("Enter d: "))
+D0 = int(input("Enter D0 (radius): "))
+n  = int(input("Enter order n: "))
 
 #Apply filter here
+def butterworth_notch_reject(img, u0, v0, D0, n=2):
+    h,w = img.shape
+    M, N = h//2, w//2
+    H = np.ones((h,w), dtype=np.float32)
+    X, Y = u0 - M, v0 - N
+    for i in range(h):
+        for j in range(w):
+            Dk  = np.sqrt((i-M-X)**2 + (j-N-Y)**2)
+            Dk_ = np.sqrt((i-M+X)**2 + (j-N+Y)**2)
+            q1 = (D0 / Dk)**(2*n) if Dk != 0 else 1
+            q2 = (D0 / Dk_)**(2*n) if Dk_ != 0 else 1
+            H[i,j] = 1 / (1 + q1) * 1 / (1 + q2)
 
-band= band_pass_filter(magnitude_spectrum_ac, d)
-notch = notch_filter(magnitude_spectrum_ac, 261, 261, d)
-magnitude_spectrum_ac = magnitude_spectrum_ac * notch
-filtered_spectrum = magnitude_spectrum * notch
+    return H
+
+H1 = butterworth_notch_reject(magnitude_spectrum_ac, 272,256, D0, n)
+H2 = butterworth_notch_reject(magnitude_spectrum_ac, 261,261, D0, n)
+
+H = H1 * H2
+
+magnitude_spectrum_ac_ = magnitude_spectrum_ac * H
+filtered_spectrum = magnitude_spectrum * H
 
 ## phase add F(u,v)=∣F(u,v)∣*e^jθ(u,v)
-final_result = np.multiply(magnitude_spectrum_ac, np.exp(1j*ang))
+final_result = np.multiply(magnitude_spectrum_ac_, np.exp(1j*ang))
 
 # inverse fourier
 img_back = np.real(np.fft.ifft2(np.fft.ifftshift(final_result)))
 img_back_scaled = cv2.normalize(img_back, None, 0,255,cv2.NORM_MINMAX,dtype=cv2.CV_8U)
 
-
 ## plot
 cv2.imshow("input", img_input)
-cv2.imshow("Notch Filter", notch*255)
-# cv2.imshow("Band Pass Filter", band*255)
+cv2.imshow("Butterworth Notch Reject Filter",(H*255).astype(np.uint8))
 cv2.imshow("Magnitude Spectrum",magnitude_spectrum)
 cv2.imshow("Magnitude Spectrum after filter",cv2.normalize(filtered_spectrum, None,0,255,cv2.NORM_MINMAX,dtype=cv2.CV_8U))
 cv2.imshow("Phase", ang_)
