@@ -65,3 +65,15 @@ cv2.imshow("Inverse transform",img_back_scaled)
 
 cv2.waitKey(0)
 cv2.destroyAllWindows()
+
+# plt.figure(figsize=(9,18))
+
+# plt.subplot(5,2,1),plt.imshow(img_input, cmap = 'gray'),plt.title('Input Image'), plt.axis('off')
+# plt.subplot(5,2,2),plt.imshow(magnitude_spectrum, cmap = 'gray'),plt.title('Magnitude Spectrum'), plt.axis('off')
+# plt.subplot(5,2,3), plt.imshow(ang_, cmap = 'gray'),plt.title('Phase Spectrum'), plt.axis('off')
+# plt.subplot(5,2,4),plt.imshow((H*255).astype(np.uint8), cmap = 'gray'),plt.title(f'Butterworth Notch Reject Filter (D0={D0}, n={n})'), plt.axis('off')
+# plt.subplot(5,2,5),plt.imshow(cv2.normalize(filtered_spectrum, None,0,255,cv2.NORM_MINMAX,dtype=cv2.CV_8U), cmap = 'gray'),plt.title('Magnitude Spectrum after filter (D0 = 5)'), plt.axis('off')
+# plt.subplot(5,2,6),plt.imshow(img_back_scaled, cmap = 'gray'),plt.title('Inverse Transform (D0 = 5)'), plt.axis('off')
+
+# plt.tight_layout()
+# plt.show()
