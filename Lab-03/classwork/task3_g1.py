@@ -17,9 +17,7 @@ h,w = img.shape
 
 size = h*w
 
-hist = cv2.calcHist([img],[0],None,[256],[0,256])
-
-hist = cv2.transpose(hist)[0]
+hist = cv2.calcHist([img],[0],None,[256],[0,256]).flatten()
 
 pdf = hist / size
 
@@ -35,10 +33,13 @@ trn = np.zeros(256, dtype = np.uint8)
 for i in range(256):
     trn[i] = (cdf[i] * (L-1))
 
-img_eq =  cv2.LUT(img, trn)
+# img_eq =  cv2.LUT(img, trn)
+img_eq = np.zeros((h,w), dtype = np.uint8)
+for i in range(h):
+    for j in range(w):
+        img_eq[i,j] = trn[img[i,j]]
 
-hist_eq = cv2.calcHist([img_eq], [0], None, [256], [0,256])
-hist_eq = cv2.transpose(hist_eq)[0]
+hist_eq = cv2.calcHist([img_eq], [0], None, [256], [0,256]).flatten()
 
 pdf_eq = hist_eq / size
 cdf_eq = np.zeros(256)

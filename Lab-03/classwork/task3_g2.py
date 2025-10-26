@@ -7,8 +7,7 @@ def histogram_equalization(img):
     h, w = img.shape
     size = h * w
 
-    hist = cv2.calcHist([img], [0], None, [256], [0, 256])
-    hist = cv2.transpose(hist)[0]
+    hist = cv2.calcHist([img], [0], None, [256], [0, 256]).flatten()
     pdf = hist / size
 
     cdf = np.zeros(256)
@@ -22,8 +21,7 @@ def histogram_equalization(img):
 
     img_eq = cv2.LUT(img, trn)
 
-    hist_eq = cv2.calcHist([img_eq], [0], None, [256], [0, 256])
-    hist_eq = cv2.transpose(hist_eq)[0]
+    hist_eq = cv2.calcHist([img_eq], [0], None, [256], [0, 256]).flatten()
     pdf_eq = hist_eq / size
 
     cdf_eq = np.zeros(256)
